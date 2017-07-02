@@ -2,27 +2,9 @@
 #include <string>
 #include <cstring>
 #include <algorithm>
+#include <stack>
 using namespace std;
 
-char* strrev( char* s )
-  {
-  char  c;
-  char* s0 = s - 1;
-  char* s1 = s;
-
-  /* Find the end of the string */
-  while (*s1) ++s1;
-
-  /* Reverse it */
-  while (s1-- > ++s0)
-    {
-    c   = *s0;
-    *s0 = *s1;
-    *s1 =  c;
-    }
-
-  return s;
-  }
 int main(){
     char N1[1001];
     char N2[1001];
@@ -50,6 +32,7 @@ int main(){
         }
     }
 
+    stack <char> st;
     int index = 0;
     int i = len1;
     int j = len2;
@@ -59,9 +42,9 @@ int main(){
         {
             i = i - 1;
             j = j - 1;
-            LCS[index++] = N1[i];
+            st.push(N1[i]);
         }
-        else if (d[i][j] > d[i - 1][j] && d[i][j] == d[i][j - 1])
+        else if (d[i][j] == d[i][j - 1])
         {
             j = j - 1;
         }else{
@@ -69,5 +52,9 @@ int main(){
         }
     }
     printf("%d\n", d[len1][len2]);
-    printf("%s\n", strrev(LCS));
+    while(!st.empty()){
+        printf("%c",st.top());
+        st.pop();
+    }
+    printf("\n");
 }
