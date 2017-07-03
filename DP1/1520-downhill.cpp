@@ -11,20 +11,20 @@ int downHill(int row, int col, int maxRow, int maxCol)
 
     if (row == maxRow && col == maxCol)
     {
-        return 1;
+        return 1; //끝에 도달하면 1리턴
     }
     if(d[row][col] >= 0){
-        return d[row][col];
+        return d[row][col]; //이미 계산한값이면 d테이블값 리턴
     }
 
     if (d[row][col] == -1)
-        d[row][col] = 0;
+        d[row][col] = 0; //처음 검사할 때 0 대입
     
     for (int i = 0; i < 4; i++)
     {
         if(row + dx[i] >= 0 && row + dx[i] <= maxRow && col + dy[i]>=0 && col + dy[i] <= maxCol)
             if (t[row + dx[i]][col + dy[i]] < t[row][col])
-                d[row][col] += downHill(row + dx[i], col + dy[i], maxRow, maxCol);
+                d[row][col] += downHill(row + dx[i], col + dy[i], maxRow, maxCol); //재귀로 움직이며 d값 더함
     }
     return d[row][col];
 }
@@ -43,15 +43,6 @@ int main()
         }
     }
     downHill(0,0,row-1,col-1);
-
-    /*for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < col; j++)
-        {
-            printf("%d   ",d[i][j]);
-        }
-        printf("\n");
-    }*/
 
     printf("%d\n", d[0][0]);
 }
