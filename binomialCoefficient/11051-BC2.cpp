@@ -11,7 +11,8 @@ int main(){
     for(int i = 2;i<=N;i++){
         for(int j =0;j<=i;j++){
             d[i][j] = d[i-1][j-1]+d[i-1][j];
+            d[i][j] %= 10007;
         }
     }
-    printf("%d\n",d[N][K]);
+    printf("%d\n",d[N][K] % 10007);
 }
