@@ -1,108 +1,59 @@
 #include <cstdio>
-#include <cmath>
+#include <deque>
+#include <queue>
 using namespace std;
 
-class cicleQueue
+deque<int> dq;
+int getIndex(int n)
 {
-  private:
-    int q[51];
-    int N;
-    int LOR;
-
-  public:
-    cicleQueue(int N)
+    int ret = 0;
+    for (int i = 0; i < dq.size(); i++)
     {
-        LOR = 0;
-        this->N = N;
-        for (int i = 0; i < N; i++)
+        if (dq[i] == n)
         {
-            this->q[i] = i+1;
+            ret = i;
+            break;
         }
     }
-    void left()
-    {
-        int H = q[0];
-        for (int i = 1; i < N; i++)
-        {
-            q[i-1] = q[i];
-        }
-        q[N - 1] = H;
-        LOR++;
-    }
-    void right()
-    {
-        int H = q[N - 1];
-        for (int i = N - 2; i >= 0; i--)
-        {
-            q[i+1] = q[i];
-        }
-        q[0] = H;
-        LOR++;
-    }
-    int pop()
-    {
-        int ret = q[0];
-        for (int i = 1; i < N; i++)
-        {
-            q[i-1] = q[i];
-        }
-        this->N--;
-        return ret;
-    }
-    int back(){
-        return q[N-1];
-    }
-    int front(){
-        return q[0];
-    }
-    int getIndex(int n){
-        int res = 0;
-        for(int i = 0;i<N;i++){
-            if(q[i] == n){
-                res = i;
-                break;
-            }
-        }
-        return res;
-    }
-    int getNum(){
-        return N;
-    }
-
-    void showQueue()
-    {
-        for (int i = 0; i < N; i++)
-        {
-            printf("%d ", q[i]);
-        }
-        printf("\n");
-    }
-    int getLOR(){
-        return LOR;
-    }
-};
+    return ret;
+}
 
 int main()
 {
-    int N = 0;
-    int num = 0;
-    int f[51];
-    scanf("%d %d",&N,&num);
-    for(int i = 0;i<num;i++){
-        scanf("%d",&f[i]);
+    int N, M = 0;
+    queue<int> Q;
+    scanf("%d %d", &N, &M);
+
+    for(int i = 0;i<N;i++){
+        dq.push_back(i+1);
     }
-    cicleQueue q(N);
-    
-    int cnt = 0;
-    while(cnt != num){
-        if(q.front() == f[cnt]){
-            cnt++;
-            q.pop();
-        }else if(q.getIndex(f[cnt]) >= N/2){
-            q.right();
-        }else{
-            q.left();
+    int temp = 0;
+    for (int i = 0; i < M; i++)
+    {
+        scanf("%d", &temp);
+        Q.push(temp);
+    }
+
+    int res= 0;
+    while (!Q.empty())
+    {
+        if (dq.front() == Q.front())
+        {
+            dq.pop_front();
+            Q.pop();
+        }
+        else if (getIndex(Q.front()) > dq.size() / 2)
+        {
+            dq.push_front(dq.back());
+            dq.pop_back();
+            res++;
+        }
+        else
+        {
+            dq.push_back(dq.front());
+            dq.pop_front();
+            res++;
         }
     }
-    printf("%d\n",q.getLOR());
+    printf("%d\n", res);
 }
