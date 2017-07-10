@@ -21,10 +21,8 @@ int main(){
                 j = arr[i];
                 while(j != i){
                     check[j] = 1;
-                    //printf("ss%d\n",j);
                     j = arr[j];
                 }
-                //printf("dd%d\n",i);
                 res++;
             }
         }
