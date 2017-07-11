@@ -18,6 +18,8 @@ int main(){
         }
     }
     q.push(make_pair(0,0));
+    check[0][0] = 1;
+
     int x,y,nx,ny;
     int dx[4] = {1,-1,0,0};
     int dy[4] = {0,0,1,-1};
@@ -29,11 +31,10 @@ int main(){
             nx = x + dx[i];
             ny = y + dy[i];
             if(map[nx][ny] == 1 && check[nx][ny] == 0){
-                check[nx][ny] = check[x][y] + 1;
                 q.push(make_pair(nx,ny));
+                check[nx][ny] = check[x][y] + 1;
             }
         }
     }
-    printf("%d\n",check[N-1][M-1]+1);
-
+    printf("%d\n",check[N-1][M-1]);
 }
