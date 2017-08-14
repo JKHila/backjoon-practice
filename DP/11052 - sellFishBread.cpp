@@ -11,11 +11,9 @@ int main(){
         dp[i] = a[i];
     }
     for(int i = 2;i<=N;i++){
-        for(int j = 1;j<=i;j++){
+        for(int j = 1;j<i;j++){
             dp[i] = max(dp[i],dp[i-j]+a[j]);
-            //printf("%d %d\n",j,dp[i]);
         }
-        //printf("\n");
     }
     printf("%d\n",dp[N]);
 }
