@@ -3,7 +3,7 @@ using namespace std;
 
 int main(){
     int N;
-    int dp[1001]={};\
+    int dp[1001]={};
     int mod = 10007;
     scanf("%d",&N);
 
