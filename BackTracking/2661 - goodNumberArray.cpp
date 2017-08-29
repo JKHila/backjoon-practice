@@ -8,7 +8,6 @@ bool promising(int n){
     for(int i = 1;i<=n/2;i++){
         bool diff = false;
         for(int j = 0;j<i;j++){
-            //printf("%d %d\n",n-j,n-i-j);
             if(a[n-j] != a[n-i-j]){
                 diff = true;
                 break;
@@ -35,7 +34,6 @@ void goodNumber(int i){
         }else{
             for(int j = 1;j<=3;j++){
                 a[i+1] = j;
-                //printf("%d %d\n",i+1,a[i+1]);
                 goodNumber(i+1);
             }
         }
