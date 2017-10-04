@@ -8,12 +8,11 @@ int numMelt = 0;
 int numVisit = 1;
 int check[1501][1501]={};
 int water[1501][1501]={};
+int L[2][2];
 int dx[4] ={0,1,0,-1};
 int dy[4] ={1,0,-1,0};
 vector<pair<int, int> > ice;
-int L[2][2];
 
-//queue<pair<int, int> > waterQ;
 int waterBFS(){
     int cnt = 1;
     queue<pair<int, int> > waterQ;
@@ -46,37 +45,6 @@ int waterBFS(){
     }
     return cnt-2;
 }
-/*void getMelt(){
-    vector<pair<int, int> > meltIce;
-    bool isMelt;
-    for(int i = 0;i<ice.size();){
-        isMelt = false;
-        int x = ice[i].first;
-        int y = ice[i].second;
-        for(int k = 0;k<4;k++){
-            int nx = x + dx[k];
-            int ny = y + dy[k];
-            if(nx >= 0 && nx < N && ny >=0 && ny < M){
-                if(map[nx][ny] != 'X'){
-                    meltIce.push_back(ice[i]);
-                    isMelt = true;
-                    break;
-                }
-            }
-        }
-        if(isMelt){
-            ice.erase(ice.begin()+i);
-        }else{
-            i++;
-        }
-    }    
-    for(int i = 0;i<meltIce.size();i++){
-        int x = meltIce[i].first;
-        int y = meltIce[i].second;
-        map[x][y] = '.';
-    }
-    numMelt++;
-}*/
 bool BFS(int limit){
     int ret = 0;
     queue<pair<int, int> > q;
@@ -118,7 +86,6 @@ int main(){
     }
     int l=0,h,m=0;
     h = waterBFS();
-    //printf("%d %d %d\n",l,m,h);
     while(l <= h){        
         for(int i = 0;i<N;i++){
             for(int j = 0;j<M;j++){
@@ -127,12 +94,8 @@ int main(){
         }
         numVisit++;        
         m = (l+h)/2;
-        //printf("%d %d %d\n",l,m,h);
         
-        if(BFS(m)){
-            h = m -1;
-            //printf("df\n");
-        }
+        if(BFS(m)) h = m -1;
         else l = m+1;
     }
     printf("%d\n",l);
