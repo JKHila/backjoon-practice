@@ -11,7 +11,9 @@ int main(){
         arr.push_back(make_pair(a,b));
     }
     sort(arr.begin(),arr.end());
- 
+    for(int i = 0;i<N;i++){
+        printf("%d %d %d\n",i,arr[i].first,arr[i].second);
+    }
     int res = 1;
     int refNum = 0;
     for(int i = 1;i<N;i++){
