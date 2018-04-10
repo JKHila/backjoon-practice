@@ -1,147 +1,91 @@
-#include <cstdio>
-#include <algorithm>
 #include <iostream>
+#include <algorithm>
 #include <vector>
-#include <queue>
 #include <cstring>
 using namespace std;
-int N, M, K;
-typedef struct node
-{
+int N,M,K;
+int dx[5] = {0,-1,1,0,0};
+int dy[5] = {0,0,0,-1,1};
+int ans = 0;
+typedef struct node{
     int x;
     int y;
     int n;
     int d;
-} node;
-//vector<pair<pair<int,int>, pair<int,int> > > vec;
+}node;
 vector<node> vec;
-void printStat()
-{
-    for (int i = 0; i < vec.size(); i++)
-    {
-        //printf("%d %d %d %d %d\n",i,vec[i].first.first,vec[i].first.second,vec[i].second.first,vec[i].second.second);
-    }
-    cout << endl;
-}
-void printVec()
-{
-    int map[100][100] = {};
-    for (int j = 0; j < vec.size(); j++)
-    {
-        map[vec[j].x][vec[j].y] = vec[j].n;
-        //printf("%d %d %d %d\n",,..second.second);
-    }
-    for (int i = 0; i < N; i++)
-    {
-        for (int j = 0; j < N; j++)
-        {
-            printf("%d   ", map[i][j]);
-        }
-        cout << endl;
-    }
-    cout << vec.size() << endl;
-}
-int step()
-{
-    int dx[4] = {-1, 1, 0, 0};
-    int dy[4] = {0, 0, -1, 1};
-    queue<int> q[100][100];
-    
-    for (int i = 0; i < M; i++)
-    {
-
-        for (int j = 0; j < vec.size(); j++)
-        { //move
-            if (vec[j].n == 0)
-                continue;
-            int dir = vec[j].d;
-            vec[j].x += dx[dir - 1];
-            vec[j].y += dy[dir - 1];
-            q[vec[j].x][vec[j].y].push(j);
-        }
-
-        for (int j = 0; j < vec.size(); j++)
-        { //change dir
-            if (vec[j].n == 0)
-                continue;
-
-            int x = vec[j].x;
-            int y = vec[j].y;
-            if (x == 0 || y == 0 || x == N - 1 || y == N - 1)
-            {
-                vec[j].n /= 2;
-                switch (vec[j].d)
-                {
-                case 1:
-                    vec[j].d = 2;
-                    break;
-                case 2:
-                    vec[j].d = 1;
-                    break;
-                case 3:
-                    vec[j].d = 4;
-                    break;
-                case 4:
-                    vec[j].d = 3;
-                    break;
+void solve(){
+    int map[100][100]={};
+    ans = 0;
+    //M번 반복
+    for(int i = 0;i<M;i++){
+        //각 미생물 당 계산
+        for(int j = 0;j<vec.size();j++){
+            if(vec[j].n == 0) continue;
+            //이동        
+            vec[j].x += dx[vec[j].d];
+            vec[j].y += dy[vec[j].d];
+            //맵에 체크
+            map[vec[j].x][vec[j].y] +=1;
+            //맵 끝이면 방향 변경, 미생물 수 반으로
+            if(vec[j].x == 0 || vec[j].x == N-1 || vec[j].y == 0 || vec[j].y == N-1){
+                switch(vec[j].d){
+                    case 1: vec[j].d = 2;break;
+                    case 2: vec[j].d = 1;break;
+                    case 3: vec[j].d = 4;break;
+                    case 4: vec[j].d = 3;
                 }
+                vec[j].n /= 2;                
             }
-            else if (q[vec[j].x][vec[j].y].size() > 1)
-            {
-                int mxN = 0, mx = 0, ms = 0, mxD;
-                while (!q[vec[j].x][vec[j].y].empty())
-                {
-                    int tpN = q[vec[j].x][vec[j].y].front();
-                    ms += vec[tpN].n;
-                    if (mx < vec[tpN].n)
-                    {
-                        mxN = tpN;
-                        mxD = vec[tpN].d;
-                        mx = vec[tpN].n;
+        }
+        //겹치는 미생물 검사
+        for(int i = 0;i<N;i++){
+            for(int j = 0;j<N;j++){
+                if(map[i][j] > 1){
+                    int sum = 0;
+                    int mxNode = -1;
+                    int mxNum = -1;
+                    //해당 맵에 있는 셀 전부 검사
+                    for(int k = 0;k<vec.size();k++){
+                        if(vec[k].n == 0) continue;
+                        if(vec[k].x == i && vec[k].y == j){
+                            sum += vec[k].n;
+                            if(mxNum < vec[k].n){
+                                mxNum = vec[k].n;
+                                mxNode = k;                          
+                            }
+                            vec[k].n = 0;
+                        }
                     }
-                    vec[tpN].n = 0;
-                    q[vec[j].x][vec[j].y].pop();
+                    //제일 큰 미생물 군집에 몰빵
+                    vec[mxNode].n = sum;
                 }
-                vec[mxN].n = ms;
-                vec[mxN].d = mxD;
-            }
-            else if (q[vec[j].x][vec[j].y].size() > 0)
-            {
-                q[vec[j].x][vec[j].y].pop();
+                map[i][j] = 0;
             }
         }
-        //printVec();
     }
-    int ret = 0;
+
     for (int j = 0; j < vec.size(); j++)
     {
-        if (vec[j].n > 0)
-        {
-            ret += vec[j].n;
-        }
+        if (vec[j].n == 0)
+            continue;
+        ans += vec[j].n;
     }
-    return ret;
 }
-int main()
-{
-    freopen("input.txt", "r", stdin);
+int main(){
+    freopen("input.txt","r",stdin);
     int T;
-    scanf("%d", &T);
-    for (int t = 1; t <= T; t++)
-    {
-        scanf("%d%d%d", &N, &M, &K);
-        for (int i = 0; i < K; i++)
-        {
-            int x, y, n, d;
+    cin >> T;
+    int x,y;
+    for(int t = 1; t<= T;t++){
+        cin >> N >> M >> K;
+        for(int i = 0; i < K; i++){
             node nd;
-            scanf("%d%d%d%d", &x, &y, &n, &d);
-            nd.x = x;
-            nd.y = y;
-            nd.n = n;
-            nd.d = d;
+            cin >> nd.x >> nd.y >> nd.n >> nd.d;
             vec.push_back(nd);
         }
-        printf("#%d %d\n", t, step());
+        solve();
+        cout<<"#"<<t<<" "<<ans<<endl;
         vec.clear();
     }
 }

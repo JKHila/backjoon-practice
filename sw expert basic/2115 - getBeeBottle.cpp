@@ -6,7 +6,7 @@ using namespace std;
 int N,M,C;
 int map[11][11];
 int beeBottle[6];
-int check[6];
+bool check[6];
 int mx = -1;
 void calc(int x,int y){
     int ret = 0;
@@ -24,10 +24,10 @@ void dfs(int depth,int x,int y){
     if(depth == M){
         calc(x,y);
     }else{
-        for(int i = 0;i<2;i++){
-            check[depth] = i;
-            dfs(depth+1,x,y);
-        }
+        check[depth] = true;
+        dfs(depth+1);
+        check[depth] = false;
+        dfs(depth+1);
     }
 }
 int checkF(int x,int y){
